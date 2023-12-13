@@ -4,7 +4,7 @@ from PIL import Image
 from PIL import ImageDraw
 
 
-def word2pic(txt_path='./test.txt', ttf_path="./src/test.TTF", save_path="./result/", size=4):
+def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path="./result/", size=4):
     font = ImageFont.truetype(ttf_path, 25)  # 设置字体
     f = open(txt_path, 'r', encoding='utf-8')  # 设置文档
     string = f.read()
@@ -35,8 +35,8 @@ def word2pic(txt_path='./test.txt', ttf_path="./src/test.TTF", save_path="./resu
 
 if __name__ == "__main__":
     size = 4  # 整齐度
-    txt_path = './test.txt'  # 文档位置
-    ttf_path = "src/test.TTF"  # 字体位置
+    txt_path = './source.txt'  # 文档位置
+    ttf_path = "src/writeup.TTF"  # 字体位置
     save_path = "./result/"  # 储存文件夹 若没有不会自动生成
     word2pic(txt_path, ttf_path, save_path, size)
     print("success!")
