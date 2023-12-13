@@ -1,0 +1,13 @@
+* text=auto
+
+# source file
+*.py    text
+*.txt   text
+
+# image binary
+*.jpg   binary
+*.png   binary
+
+# font file
+*.ttf   binary
+*.otf   binary
