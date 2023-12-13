@@ -4,7 +4,7 @@
 1. put font file and background file into `/src/`
 2. set up arguments:
     ``` python
-    size = 2  # Chaos
+    size = 4  # Chaos
     txt_path = './source.txt'  # Text File
     ttf_path = "src/writeup.TTF"  # Font
     save_path = "./result/"  # storage folder

@@ -44,7 +44,7 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path=".
                 if isAlphaBet(string[flag]):
                     j += 13
                 else:
-                    j += 25
+                    j += 22
                 flag += 1
             if flag >= lenstr:
                 break
@@ -57,7 +57,7 @@ if __name__ == "__main__":
         for file in files:
             if file.endswith('.png'):
                 os.remove(root + '/' + file)
-    size = 2  # Chaos
+    size = 4  # Chaos
     txt_path = './source.txt'  # Text File
     ttf_path = "src/writeup.TTF"  # Font
     save_path = "./result/"  # storage folder
