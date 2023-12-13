@@ -5,6 +5,20 @@ from PIL import Image
 from PIL import ImageDraw
 
 
+def isAlphaBet(s=''):
+    length = len(s)
+    if length == 0:
+        return False
+    for i in range(0, length):
+        if s[i] != ' ':
+            try:
+                c = s.encode('ascii')
+                return True
+            except:
+                return False
+    return True
+
+
 def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path="./result/", size=4):
     font = ImageFont.truetype(ttf_path, 25)  # 设置字体
     f = open(txt_path, 'r', encoding='utf-8')  # 设置文档
@@ -17,28 +31,30 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path=".
         img = Image.open('./src/background.png')
         draw = ImageDraw.Draw(img)
         for i in range(28):
-            for j in range(38):
+            j = 70
+            while j < 995 :
                 if flag >= lenstr:
                     break
                 if string[flag] == '\n':
                     flag += 1
                     break
-                draw.text((70 + random.random() * size / 2 + 25 * j, 83 + random.random() * size + i * 48),
-                          string[flag], (0, 0, 0),
-                          font=font)
+                draw.text((random.random() * size / 2 + j, 83 + random.random() * size + i * 48), string[flag], (0, 0, 0), font=font)
+                if isAlphaBet(string[flag]):
+                    j += 13
+                else:
+                    j += 25
                 flag += 1
             if flag >= lenstr:
                 break
         img.save(save_path + str(page) + ".png")
         page += 1
 
-
 if __name__ == "__main__":
     for root, dirs, files in os.walk('./result/'):
         for file in files:
             if file.endswith('.png'):
                 os.remove(root + '/' + file)
-    size = 4  # 整齐度
+    size = 2  # 混乱度
     txt_path = './source.txt'  # 文档位置
     ttf_path = "src/writeup.TTF"  # 字体位置
     save_path = "./result/"  # 储存文件夹 若没有不会自动生成
