@@ -12,7 +12,7 @@ def isAlphaBet(s=''):
     for i in range(0, length):
         if s[i] != ' ':
             try:
-                c = s.encode('ascii')
+                s.encode('ascii')
                 return True
             except:
                 return False
