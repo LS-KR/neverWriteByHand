@@ -19,7 +19,7 @@ def isAlphaBet(s=''):
     return True
 
 
-def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path="./result/", size=4):
+def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path="./result/", size=4, white=False):
     font = ImageFont.truetype(ttf_path, 25)  # 设置字体
     f = open(txt_path, 'r', encoding='utf-8')  # 设置文档
     string = f.read()
@@ -28,7 +28,7 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path=".
     page = 1
     flag = 0
     while flag < lenstr:
-        img = Image.open('./src/background.png')
+        img = Image.open('./src/backgroundW.png' if white else './src/backgroundY.png')
         draw = ImageDraw.Draw(img)
         for i in range(28):
             j = 70
@@ -58,5 +58,6 @@ if __name__ == "__main__":
     txt_path = './source.txt'  # 文档位置
     ttf_path = "src/writeup.TTF"  # 字体位置
     save_path = "./result/"  # 储存文件夹 若没有不会自动生成
-    word2pic(txt_path, ttf_path, save_path, size)
+    white = False    # 若为 True 则生成白底
+    word2pic(txt_path, ttf_path, save_path, size, white)
     print("success!")
