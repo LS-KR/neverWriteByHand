@@ -1,4 +1,5 @@
 import random
+import os
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
@@ -29,11 +30,14 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path=".
             if flag >= lenstr:
                 break
         img.save(save_path + str(page) + ".png")
-        img.show()
         page += 1
 
 
 if __name__ == "__main__":
+    for root, dirs, files in os.walk('./result/'):
+        for file in files:
+            if file.endswith('.png'):
+                os.remove(root + '/' + file)
     size = 4  # 整齐度
     txt_path = './source.txt'  # 文档位置
     ttf_path = "src/writeup.TTF"  # 字体位置
