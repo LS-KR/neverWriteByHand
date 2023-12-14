@@ -1,4 +1,5 @@
 # neverWriteByHand
+
 ## Usage
 
 1. put font file and background file into `/src/`
@@ -19,7 +20,7 @@
     - `while`: If this param set as `True`, a white background-ed image would generated; else, a default background.
     - `fill`: The stroke color(RGBA) of character.
 
-
 # Result
+
 ![img1](./img/1.png)
 ![img2](./img/2.png)

@@ -4,6 +4,9 @@
 *.py    text
 *.txt   text
 
+# config file
+*.ini   text
+
 # image binary
 *.jpg   binary
 *.png   binary

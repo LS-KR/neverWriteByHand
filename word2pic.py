@@ -71,6 +71,7 @@ def getConfig(key: str, default: any, ctype: str):
     except:
         return default
 
+
 if __name__ == "__main__":
     size = getConfig('size', 4, 'int')  # Chaos
     txt_path = getConfig('txt_path', './source.txt', 'str')  # Text File
