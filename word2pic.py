@@ -20,7 +20,7 @@ def isAlphaBet(s=''):
     return True
 
 
-def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path="./result/", size=4, white=0,
+def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.ttf", save_path="./result/", size=4, white=0,
              fill=(0, 0, 0, 255)):
     font = ImageFont.truetype(ttf_path, 25)  # Setup Font
     f = open(txt_path, 'r', encoding='utf-8')  # Setup Text
@@ -75,7 +75,7 @@ def getConfig(key: str, default: any, ctype: str):
 if __name__ == "__main__":
     size = getConfig('size', 4, 'int')  # Chaos
     txt_path = getConfig('txt_path', './source.txt', 'str')  # Text File
-    ttf_path = getConfig('ttf_path', './src/writeup.TTF', 'str')  # Font
+    ttf_path = getConfig('ttf_path', './src/writeup.ttf', 'str')  # Font
     save_path = getConfig('save_path', './result/', 'str')  # storage folder
     white = getConfig('white', 0, 'int')  # If set as 1, a white background is generated
     fill = getConfig('fill', '#000000FF', 'str')  # Color (RGBA)
