@@ -78,7 +78,7 @@ if __name__ == "__main__":
     ttf_path = getConfig('ttf_path', './src/writeup.TTF', 'str')  # Font
     save_path = getConfig('save_path', './result/', 'str')  # storage folder
     white = getConfig('white', 0, 'int')  # If set as 1, a white background is generated
-    fill = getConfig('fill', '#000060FF', 'str')  # Color (RGBA)
+    fill = getConfig('fill', '#000000FF', 'str')  # Color (RGBA)
     for root, dirs, files in os.walk(save_path):
         for file in files:
             if file.endswith('.png'):
