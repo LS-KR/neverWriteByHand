@@ -53,15 +53,15 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path=".
 
 
 if __name__ == "__main__":
-    for root, dirs, files in os.walk('./result/'):
-        for file in files:
-            if file.endswith('.png'):
-                os.remove(root + '/' + file)
     size = 4  # Chaos
     txt_path = './source.txt'  # Text File
     ttf_path = "src/writeup.TTF"  # Font
     save_path = "./result/"  # storage folder
     white = False  # If True, a white background is generated
     fill = (0, 0, 96, 255)  # Color (RGBA)
+    for root, dirs, files in os.walk(save_path):
+        for file in files:
+            if file.endswith('.png'):
+                os.remove(root + '/' + file)
     word2pic(txt_path, ttf_path, save_path, size, white, fill)
     print("success!")
