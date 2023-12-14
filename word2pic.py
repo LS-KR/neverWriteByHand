@@ -53,32 +53,31 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.TTF", save_path=".
         page += 1
 
 
-if __name__ == "__main__":
-    size = 4  # Chaos
-    txt_path = './source.txt'  # Text File
-    ttf_path = "./src/writeup.TTF"  # Font
-    save_path = "./result/"  # storage folder
-    white = 0  # If set as 1, a white background is generated
-    fill = "#000060FF"  # Color (RGBA)
+def getConfig(key: str, default: any, ctype: str):
+    config = configparser.ConfigParser()
+    config.read('./config.ini')
+    secret = config['DEFAULT']
     try:
-        config = configparser.ConfigParser()
-        config.read('./config.ini')
-        secret = config['DEFAULT']
-        size = int(secret['size'])
-        white = int(secret['white'])
-        txt_path = secret['txt_path']
-        ttf_path = secret['ttf_path']
-        save_path = secret['save_path']
-        fill = secret['fill']
+        if ctype.__eq__('int'):
+            return int(secret[key])
+        elif ctype.__eq__('float'):
+            return float(secret[key])
+        elif ctype.__eq__('bool'):
+            return bool(secret[key])
+        elif ctype.__eq__('str'):
+            return str(secret[key])
+        else:
+            return secret[key]
     except:
-        print('invalid config')
-        print('using default settings')
-        size = 4
-        txt_path = './source.txt'
-        ttf_path = "./src/writeup.TTF"
-        save_path = "./result/"
-        white = 0
-        fill = "#000060FF"
+        return default
+
+if __name__ == "__main__":
+    size = getConfig('size', 4, 'int')  # Chaos
+    txt_path = getConfig('txt_path', './source.txt', 'str')  # Text File
+    ttf_path = getConfig('ttf_path', './src/writeup.TTF', 'str')  # Font
+    save_path = getConfig('save_path', './result/', 'str')  # storage folder
+    white = getConfig('white', 0, 'int')  # If set as 1, a white background is generated
+    fill = getConfig('fill', '#000060FF', 'str')  # Color (RGBA)
     for root, dirs, files in os.walk(save_path):
         for file in files:
             if file.endswith('.png'):
