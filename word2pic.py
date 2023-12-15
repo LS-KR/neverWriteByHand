@@ -113,7 +113,7 @@ if __name__ == "__main__":
     font_size = getOverrideConfig('font_size', 25, 'float')
     xy = (getOverrideConfig('startX', 70, 'int'), getOverrideConfig('startY', 83, 'int'))
     line_gap = getOverrideConfig('gap', 48, 'int')
-    rx = (getOverrideConfig('length', 995, 'int'), getOverrideConfig('sizeEn', int(font_size / 2), 'int'), getOverrideConfig('sizeCn', font_size - 3, 'int'))
+    rx = (getOverrideConfig('length', 925, 'int') + xy[0], getOverrideConfig('sizeEn', int(font_size / 2), 'int'), getOverrideConfig('sizeCn', font_size - 3, 'int'))
     for root, dirs, files in os.walk(save_path):
         for file in files:
             if file.endswith('.png'):

@@ -30,7 +30,7 @@ font_size = 25
 startX = 70
 startY = 83
 gap = 48
-length = 995
+length = 925
 sizeEn = 13
 sizeCn = 22
 ```
