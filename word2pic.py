@@ -20,9 +20,20 @@ def isAlphaBet(s=''):
     return True
 
 
-def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.ttf", save_path="./result/", size=4, white=0,
-             fill=(0, 0, 0, 255)):
-    font = ImageFont.truetype(ttf_path, 25)  # Setup Font
+def word2pic(
+        txt_path='./source.txt',
+        ttf_path="./src/writeup.ttf",
+        save_path="./result/",
+        size=4,
+        background='./src/backgroundW.png',
+        fill=(0, 0, 0, 255),
+        lines=28,
+        font_size=25,
+        xy=(70, 83),
+        line_gap=48,
+        rx=(995, 13, 22)
+):
+    font = ImageFont.truetype(ttf_path, font_size)  # Setup Font
     f = open(txt_path, 'r', encoding='utf-8')  # Setup Text
     string = f.read()
     f.close()
@@ -30,22 +41,21 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.ttf", save_path=".
     page = 1
     flag = 0
     while flag < lenstr:
-        img = Image.open('./src/backgroundW.png' if white == 1 else './src/backgroundY.png')
+        img = Image.open(background)
         draw = ImageDraw.Draw(img)
-        for i in range(28):
-            j = 70
-            while j < 995:
+        for i in range(lines):
+            j = xy[0]
+            while j < rx[0]:
                 if flag >= lenstr:
                     break
                 if string[flag] == '\n':
                     flag += 1
                     break
-                draw.text((random.random() * size / 2 + j, 83 + random.random() * size + i * 48), string[flag], fill,
-                          font=font)
+                draw.text((random.random() * size / 2 + j, xy[1] + random.random() * size + i * line_gap), string[flag], fill, font=font)
                 if isAlphaBet(string[flag]):
-                    j += 13
+                    j += rx[1]
                 else:
-                    j += 22
+                    j += rx[2]
                 flag += 1
             if flag >= lenstr:
                 break
@@ -56,8 +66,27 @@ def word2pic(txt_path='./source.txt', ttf_path="./src/writeup.ttf", save_path=".
 def getConfig(key: str, default: any, ctype: str):
     config = configparser.ConfigParser()
     config.read('./config.ini')
-    secret = config['DEFAULT']
     try:
+        secret = config['DEFAULT']
+        if ctype.__eq__('int'):
+            return int(secret[key])
+        elif ctype.__eq__('float'):
+            return float(secret[key])
+        elif ctype.__eq__('bool'):
+            return bool(secret[key])
+        elif ctype.__eq__('str'):
+            return str(secret[key])
+        else:
+            return secret[key]
+    except:
+        return default
+
+
+def getOverrideConfig(key: str, default: any, ctype: str):
+    config = configparser.ConfigParser()
+    config.read('./config.ini')
+    try:
+        secret = config['OVERRIDE']
         if ctype.__eq__('int'):
             return int(secret[key])
         elif ctype.__eq__('float'):
@@ -79,9 +108,15 @@ if __name__ == "__main__":
     save_path = getConfig('save_path', './result/', 'str')  # storage folder
     white = getConfig('white', 0, 'int')  # If set as 1, a white background is generated
     fill = getConfig('fill', '#000000FF', 'str')  # Color (RGBA)
+    background = getOverrideConfig('background', './src/backgroundW.png' if white == 1 else './src/backgroundY.png', 'str')
+    lines = getOverrideConfig('lines', 28, 'int')
+    font_size = getOverrideConfig('font_size', 25, 'float')
+    xy = (getOverrideConfig('startX', 70, 'int'), getOverrideConfig('startY', 83, 'int'))
+    line_gap = getOverrideConfig('gap', 48, 'int')
+    rx = (getOverrideConfig('length', 995, 'int'), getOverrideConfig('sizeEn', int(font_size / 2), 'int'), getOverrideConfig('sizeCn', font_size - 3, 'int'))
     for root, dirs, files in os.walk(save_path):
         for file in files:
             if file.endswith('.png'):
                 os.remove(root + '/' + file)
-    word2pic(txt_path, ttf_path, save_path, size, white, fill)
+    word2pic(txt_path, ttf_path, save_path, size, background, fill, lines, font_size, xy, line_gap, rx)
     print("success!")

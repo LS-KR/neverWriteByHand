@@ -20,7 +20,31 @@
     - `while`: If this param set as `True`, a white background-ed image would generated; else, a default background.
     - `fill`: The stroke color(RGBA) of character.
 
-# Result
+## Override configs
+
+```ini
+[OVERRIDE]
+background = ./src/backgroundW.png
+lines = 28
+font_size = 25
+startX = 70
+startY = 83
+gap = 48
+length = 995
+sizeEn = 13
+sizeCn = 22
+```
+- `background`: Use specific background instead of a built-in one.
+- `lines`: The number of lines you want to write.
+- `font_size`: The size of font.
+- `startX`: The pixel of x where the character would start.
+- `startY`: The pixel of y where the character would start.
+- `gap`: The gap between lines.
+- `length`: The length of the lines.
+- `sizeEn`: The size of the half-width characters.
+- `sizeCn`: The size of the full-width characters.
+
+## Result
 
 ![img1](./img/1.png)
 ![img2](./img/2.png)
