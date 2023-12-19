@@ -1,5 +1,12 @@
 # neverWriteByHand
 
+## Dependencies
+
+```
+pillow >= 10.0.0
+pilkit >= 3.0
+```
+
 ## Usage
 
 1. put font file and background file into `/src/`
