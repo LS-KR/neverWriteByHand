@@ -68,16 +68,15 @@ def getConfig(key: str, default: any, ctype: str):
     config.read('./config.ini')
     try:
         secret = config['DEFAULT']
-        if ctype.__eq__('int'):
-            return int(secret[key])
-        elif ctype.__eq__('float'):
-            return float(secret[key])
-        elif ctype.__eq__('bool'):
-            return bool(secret[key])
-        elif ctype.__eq__('str'):
-            return str(secret[key])
-        else:
-            return secret[key]
+        match ctype:
+            case 'int':
+                return int(secret[key])
+            case 'float':
+                return float(secret[key])
+            case 'bool':
+                return bool(secret[key])
+            case 'str':
+                return str(secret[key])
     except:
         return default
 
@@ -87,16 +86,15 @@ def getOverrideConfig(key: str, default: any, ctype: str):
     config.read('./config.ini')
     try:
         secret = config['OVERRIDE']
-        if ctype.__eq__('int'):
-            return int(secret[key])
-        elif ctype.__eq__('float'):
-            return float(secret[key])
-        elif ctype.__eq__('bool'):
-            return bool(secret[key])
-        elif ctype.__eq__('str'):
-            return str(secret[key])
-        else:
-            return secret[key]
+        match ctype :
+            case 'int':
+                return int(secret[key])
+            case 'float':
+                return float(secret[key])
+            case 'bool':
+                return bool(secret[key])
+            case 'str':
+                return str(secret[key])
     except:
         return default
 
