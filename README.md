@@ -24,7 +24,7 @@ pilkit >= 3.0
     - `txt_path`: The path of the txt file.
     - `ttf_path`: Font file path (TTF only).
     - `save_path`: Generated image would save into this path. Should be a directory.
-    - `while`: If this param set as `True`, a white background-ed image would generated; else, a default background.
+    - `while`: If this param set as `1`, a white background-ed image would generated; else, a default background.
     - `fill`: The stroke color(RGBA) of character.
 
 ## Override configs
