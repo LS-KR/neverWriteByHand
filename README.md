@@ -51,6 +51,14 @@ sizeCn = 22
 - `sizeEn`: The size of the half-width characters.
 - `sizeCn`: The size of the full-width characters.
 
+## Format configs
+
+```ini
+[FORMAT]
+wide_char = @
+```
+- `wide_char`: which character will use wide space instead of default ascii judge.
+
 ## Result
 
 ![img1](./img/1.png)

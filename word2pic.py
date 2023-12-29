@@ -31,7 +31,8 @@ def word2pic(
         font_size=25,
         xy=(70, 83),
         line_gap=48,
-        rx=(995, 13, 22)
+        rx=(995, 13, 22),
+        wide_char=''
 ):
     font = ImageFont.truetype(ttf_path, font_size)  # Setup Font
     f = open(txt_path, 'r', encoding='utf-8')  # Setup Text
@@ -52,10 +53,10 @@ def word2pic(
                     flag += 1
                     break
                 draw.text((random.random() * size / 2 + j, xy[1] + random.random() * size + i * line_gap), string[flag], fill, font=font)
-                if isAlphaBet(string[flag]):
-                    j += rx[1]
-                else:
+                if (not isAlphaBet(string[flag])) or (string[flag] in wide_char):
                     j += rx[2]
+                else:
+                    j += rx[1]
                 flag += 1
             if flag >= lenstr:
                 break
@@ -63,11 +64,11 @@ def word2pic(
         page += 1
 
 
-def getConfig(key: str, default: any, ctype: str):
+def getConfig(_secret: str, key: str, default: any, ctype: str):
     config = configparser.ConfigParser()
     config.read('./config.ini')
     try:
-        secret = config['DEFAULT']
+        secret = config[_secret]
         match ctype:
             case 'int':
                 return int(secret[key])
@@ -80,41 +81,23 @@ def getConfig(key: str, default: any, ctype: str):
     except:
         return default
 
-
-def getOverrideConfig(key: str, default: any, ctype: str):
-    config = configparser.ConfigParser()
-    config.read('./config.ini')
-    try:
-        secret = config['OVERRIDE']
-        match ctype :
-            case 'int':
-                return int(secret[key])
-            case 'float':
-                return float(secret[key])
-            case 'bool':
-                return bool(secret[key])
-            case 'str':
-                return str(secret[key])
-    except:
-        return default
-
-
 if __name__ == "__main__":
-    size = getConfig('size', 4, 'int')  # Chaos
-    txt_path = getConfig('txt_path', './source.txt', 'str')  # Text File
-    ttf_path = getConfig('ttf_path', './src/writeup.ttf', 'str')  # Font
-    save_path = getConfig('save_path', './result/', 'str')  # storage folder
-    white = getConfig('white', 0, 'int')  # If set as 1, a white background is generated
-    fill = getConfig('fill', '#000000FF', 'str')  # Color (RGBA)
-    background = getOverrideConfig('background', './src/backgroundW.png' if white == 1 else './src/backgroundY.png', 'str')
-    lines = getOverrideConfig('lines', 28, 'int')
-    font_size = getOverrideConfig('font_size', 25, 'float')
-    xy = (getOverrideConfig('startX', 70, 'int'), getOverrideConfig('startY', 83, 'int'))
-    line_gap = getOverrideConfig('gap', 48, 'int')
-    rx = (getOverrideConfig('length', 925, 'int') + xy[0], getOverrideConfig('sizeEn', int(font_size / 2), 'int'), getOverrideConfig('sizeCn', font_size - 3, 'int'))
+    size = getConfig('DEFAULT', 'size', 4, 'int')  # Chaos
+    txt_path = getConfig('DEFAULT', 'txt_path', './source.txt', 'str')  # Text File
+    ttf_path = getConfig('DEFAULT', 'ttf_path', './src/writeup.ttf', 'str')  # Font
+    save_path = getConfig('DEFAULT', 'save_path', './result/', 'str')  # storage folder
+    white = getConfig('DEFAULT', 'white', 0, 'int')  # If set as 1, a white background is generated
+    fill = getConfig('DEFAULT', 'fill', '#000000FF', 'str')  # Color (RGBA)
+    background = getConfig('OVERRIDE', 'background', './src/backgroundW.png' if white == 1 else './src/backgroundY.png', 'str')
+    lines = getConfig('OVERRIDE', 'lines', 28, 'int')
+    font_size = getConfig('OVERRIDE', 'font_size', 25, 'float')
+    xy = (getConfig('OVERRIDE', 'startX', 70, 'int'), getConfig('OVERRIDE', 'startY', 83, 'int'))
+    line_gap = getConfig('OVERRIDE', 'gap', 48, 'int')
+    rx = (getConfig('OVERRIDE', 'length', 925, 'int') + xy[0], getConfig('OVERRIDE', 'sizeEn', int(font_size / 2), 'int'), getConfig('OVERRIDE', 'sizeCn', font_size - 3, 'int'))
+    wide_char = getConfig('FORMAT', 'wide_char', '', 'str')
     for root, dirs, files in os.walk(save_path):
         for file in files:
             if file.endswith('.png'):
                 os.remove(root + '/' + file)
-    word2pic(txt_path, ttf_path, save_path, size, background, fill, lines, font_size, xy, line_gap, rx)
+    word2pic(txt_path, ttf_path, save_path, size, background, fill, lines, font_size, xy, line_gap, rx, wide_char=wide_char)
     print("success!")
