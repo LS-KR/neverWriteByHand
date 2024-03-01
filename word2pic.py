@@ -69,15 +69,16 @@ def getConfig(_secret: str, key: str, default: any, ctype: str):
     config.read('./config.ini')
     try:
         secret = config[_secret]
-        match ctype:
-            case 'int':
-                return int(secret[key])
-            case 'float':
-                return float(secret[key])
-            case 'bool':
-                return bool(secret[key])
-            case 'str':
-                return str(secret[key])
+        if ctype == 'int':
+            return int(secret[key])
+        elif ctype == 'float':
+            return float(secret[key])
+        elif ctype == 'str':
+            return str(secret[key])
+        elif ctype == 'bool':
+            return bool(secret[key])
+        else:
+            return secret[key]
     except:
         return default
 
