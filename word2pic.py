@@ -1,9 +1,9 @@
-import random
 import os
 import configparser
 from PIL import ImageFont
 from PIL import Image
-from PIL import ImageDraw
+from handright import Template
+from handright import handwrite
 
 
 def isAlphaBet(s=''):
@@ -26,15 +26,15 @@ def word2pic(
         save_path="./result/",
         size=4,
         background='./src/backgroundW.png',
-        fill=(0, 0, 0, 255),
+        fill=0,
         lines=28,
         font_size=25,
         xy=(70, 83),
         line_gap=48,
         rx=(995, 13, 22),
-        wide_char=''
+        wide_char='',
+        sigma=20
 ):
-    font = ImageFont.truetype(ttf_path, font_size)  # Setup Font
     f = open(txt_path, 'r', encoding='utf-8')  # Setup Text
     string = f.read()
     f.close()
@@ -43,24 +43,28 @@ def word2pic(
     flag = 0
     while flag < lenstr:
         img = Image.open(background)
-        draw = ImageDraw.Draw(img)
-        for i in range(lines):
-            j = xy[0]
-            while j < rx[0]:
-                if flag >= lenstr:
-                    break
-                if string[flag] == '\n':
-                    flag += 1
-                    break
-                draw.text((random.random() * size / 2 + j, xy[1] + random.random() * size + i * line_gap), string[flag], fill, font=font)
-                if (not isAlphaBet(string[flag])) or (string[flag] in wide_char):
-                    j += rx[2]
-                else:
-                    j += rx[1]
-                flag += 1
-            if flag >= lenstr:
-                break
-        img.save(save_path + str(page) + ".png")
+        font = ImageFont.truetype(font=ttf_path, size=font_size)
+        template = Template(
+            background=img,
+            font=font,
+            font_size_sigma=sigma * 0.1 + size * 0.25,
+            fill=fill,
+            left_margin=xy[0],
+            top_margin=xy[1],
+            bottom_margin=img.height - xy[1] - lines * line_gap,
+            right_margin=img.width - xy[0] - rx[0],
+            word_spacing=5,
+            word_spacing_sigma=size,
+            start_chars="“（[<",  # 特定字符提前换行，防止出现在行尾
+            end_chars="，。",  # 防止特定字符因排版算法的自动换行而出现在行首
+            perturb_x_sigma=size,  # 笔画横向偏移随机扰动
+            perturb_y_sigma=size,  # 笔画纵向偏移随机扰动
+            line_spacing_sigma=size * 1.5,  # 行间距随机扰动
+        )
+        imgs = handwrite(string, template)
+        for i, im in enumerate(imgs):
+            assert isinstance(im, Image.Image)
+            im.save(save_path + str(page) + '.png')
         page += 1
 
 
@@ -81,6 +85,7 @@ def getConfig(_secret: str, key: str, default: any, ctype: str):
     except:
         return default
 
+
 if __name__ == "__main__":
     size = getConfig('DEFAULT', 'size', 4, 'int')  # Chaos
     txt_path = getConfig('DEFAULT', 'txt_path', './source.txt', 'str')  # Text File
@@ -88,16 +93,34 @@ if __name__ == "__main__":
     save_path = getConfig('DEFAULT', 'save_path', './result/', 'str')  # storage folder
     white = getConfig('DEFAULT', 'white', 0, 'int')  # If set as 1, a white background is generated
     fill = getConfig('DEFAULT', 'fill', '#000000FF', 'str')  # Color (RGBA)
-    background = getConfig('OVERRIDE', 'background', './src/backgroundW.png' if white == 1 else './src/backgroundY.png', 'str')
+    background = getConfig('OVERRIDE', 'background', './src/backgroundW.png' if white == 1 else './src/backgroundY.png',
+                           'str')
     lines = getConfig('OVERRIDE', 'lines', 28, 'int')
-    font_size = getConfig('OVERRIDE', 'font_size', 25, 'float')
+    font_size = getConfig('OVERRIDE', 'font_size', 25, 'int')
     xy = (getConfig('OVERRIDE', 'startX', 70, 'int'), getConfig('OVERRIDE', 'startY', 83, 'int'))
     line_gap = getConfig('OVERRIDE', 'gap', 48, 'int')
-    rx = (getConfig('OVERRIDE', 'length', 925, 'int') + xy[0], getConfig('OVERRIDE', 'sizeEn', int(font_size / 2), 'int'), getConfig('OVERRIDE', 'sizeCn', font_size - 3, 'int'))
+    rx = (
+    getConfig('OVERRIDE', 'length', 925, 'int') + xy[0], getConfig('OVERRIDE', 'sizeEn', int(font_size / 2), 'int'),
+    getConfig('OVERRIDE', 'sizeCn', font_size - 3, 'int'))
     wide_char = getConfig('FORMAT', 'wide_char', '', 'str')
+    sigma = getConfig('FORMAT', 'sigma', 20, 'int')
     for root, dirs, files in os.walk(save_path):
         for file in files:
             if file.endswith('.png'):
                 os.remove(root + '/' + file)
-    word2pic(txt_path, ttf_path, save_path, size, background, fill, lines, font_size, xy, line_gap, rx, wide_char=wide_char)
+    word2pic(
+        txt_path=txt_path,
+        ttf_path=ttf_path,
+        size=size,
+        save_path=save_path,
+        background=background,
+        fill=int(format(int(fill.strip('#'), 16), 'd')),
+        lines=lines,
+        font_size=font_size,
+        xy=xy,
+        line_gap=line_gap,
+        rx=rx,
+        wide_char=wide_char,
+        sigma=sigma
+    )
     print("success!")
